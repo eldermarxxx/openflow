@@ -1,0 +1,12 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; background: #f1f5f9; color: #0f172a; }
+.layout { display: grid; grid-template-columns: 200px 1fr 380px; height: 100vh; }
+aside { background: #fff; padding: 16px; overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+aside button { padding: 6px 10px; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 6px; cursor: pointer; text-align: left; }
+label { display: flex; flex-direction: column; font-size: 12px; gap: 2px; }
+input { padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; }
+main { display: flex; justify-content: center; padding: 24px; overflow: auto; }
+.phone { width: 360px; min-height: 640px; background: #fff; border-radius: 24px; border: 8px solid #0f172a; overflow: hidden; }
+.appbar { background: #ede7f6; padding: 16px; font-size: 20px; }
+pre { font-size: 11px; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 6px; overflow: auto; }
+.hint { font-size: 12px; color: #64748b; } .err { color: #dc2626; font-size: 12px; } small { color: #94a3b8; font-weight: 400; }
