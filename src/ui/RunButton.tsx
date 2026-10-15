@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-type Step = { id: string; title: string; detail: string; commands: string[]; done: boolean };
+type Option = { label: string; detail?: string; commands: string[] };
+type Step = { id: string; title: string; detail: string; options: Option[]; done: boolean };
 const OS: Record<string, string> = { darwin: "macOS", win32: "Windows", linux: "Linux" };
 
 /** Botão que gera o APK e abre um terminal rodando o app ao vivo no emulador; se faltar algo, mostra o onboarding. */
@@ -43,8 +44,14 @@ export function RunButton({ name, code }: { name: string; code: string }) {
                 <li key={s.id} className={s.done ? "done" : ""}>
                   <b>{s.done ? "✓ " : ""}{s.title}</b>
                   <div className="muted">{s.detail}</div>
-                  {!s.done && s.commands.map((c) => (
-                    <div key={c} className="cmd"><code>{c}</code><button onClick={() => navigator.clipboard.writeText(c)}>Copiar</button></div>
+                  {!s.done && s.options.map((o) => (
+                    <div key={o.label} className={s.options.length > 1 ? "opt" : ""}>
+                      {s.options.length > 1 && <div className="opt-label">{o.label}</div>}
+                      {o.detail && <div className="muted">{o.detail}</div>}
+                      {o.commands.map((c) => (
+                        <div key={c} className="cmd"><code>{c}</code><button onClick={() => navigator.clipboard.writeText(c)}>Copiar</button></div>
+                      ))}
+                    </div>
                   ))}
                 </li>
               ))}

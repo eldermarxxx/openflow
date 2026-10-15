@@ -5,7 +5,7 @@ import { chmodSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import type { Plugin } from "vite";
-import { onboardingSteps, packageName, runScript, terminalCommand, type Platform, type ToolStatus } from "./scripts.ts";
+import { isReady, onboardingSteps, packageName, pickEmulator, runScript, terminalCommand, type Platform, type ToolStatus } from "./scripts.ts";
 
 const platform = (process.platform === "win32" || process.platform === "darwin" ? process.platform : "linux") as Platform;
 const exe = (n: string) => (platform === "win32" ? `${n}.bat` : n);
@@ -21,14 +21,24 @@ function detect(): ToolStatus {
   const h = homedir();
   const flutter = which("flutter") ?? [join(h, "development/flutter/bin"), join(h, "flutter/bin"), "C:\\src\\flutter\\bin", "/opt/homebrew/bin"]
     .map((d) => join(d, exe("flutter"))).find(existsSync) ?? null;
-  const sdk = [process.env.ANDROID_HOME, process.env.ANDROID_SDK_ROOT, join(h, "Library/Android/sdk"), join(h, "Android/Sdk"), process.env.LOCALAPPDATA && join(process.env.LOCALAPPDATA, "Android/Sdk")]
+  const sdk = [process.env.ANDROID_HOME, process.env.ANDROID_SDK_ROOT, join(h, "Library/Android/sdk"), join(h, "Android/Sdk"), "/opt/homebrew/share/android-commandlinetools", process.env.LOCALAPPDATA && join(process.env.LOCALAPPDATA, "Android/Sdk")]
     .find((d): d is string => !!d && existsSync(d)) ?? null;
   let avds: string[] = [];
   const emu = sdk && join(sdk, "emulator", platform === "win32" ? "emulator.exe" : "emulator");
   if (emu && existsSync(emu)) {
     try { avds = execFileSync(emu, ["-list-avds"], { encoding: "utf8" }).split(/\r?\n/).map((s) => s.trim()).filter((s) => s && !s.startsWith("INFO")); } catch { /* sem AVDs */ }
   }
-  return { flutter, sdk, avds };
+  const gmtool = ["/Applications/Genymotion.app/Contents/MacOS/gmtool", "C:\\Program Files\\Genymobile\\Genymotion\\gmtool.exe", join(h, "genymotion/gmtool")].find(existsSync) ?? null;
+  let gmDevices: string[] = [];
+  if (gmtool) {
+    try {
+      // Tabela "State | ADB Serial | UUID | Name": o nome é a última coluna.
+      gmDevices = execFileSync(gmtool, ["admin", "list"], { encoding: "utf8", timeout: 15000 }).split(/\r?\n/)
+        .filter((l) => l.includes("|") && !/^\s*State\b/.test(l) && !/^[-+\s]+$/.test(l))
+        .map((l) => l.split("|").pop()!.trim()).filter(Boolean);
+    } catch { /* sem aparelhos */ }
+  }
+  return { flutter, sdk, avds, gmtool, gmDevices };
 }
 
 function body(req: import("node:http").IncomingMessage): Promise<string> {
@@ -50,7 +60,7 @@ export function openflowRunner(): Plugin {
         try {
           const { name, code } = JSON.parse(await body(req)) as { name: string; code: string };
           const status = detect();
-          if (!status.flutter || !status.sdk || status.avds.length === 0) {
+          if (!isReady(status) || !status.flutter || !status.sdk) {
             res.statusCode = 412;
             return res.end(JSON.stringify({ error: "setup", steps: onboardingSteps(platform, status) }));
           }
@@ -58,13 +68,14 @@ export function openflowRunner(): Plugin {
           const dir = join(homedir(), "OpenFlowBuilds", pkg);
           mkdirSync(join(dir, ".openflow"), { recursive: true });
           writeFileSync(join(dir, ".openflow", "main.dart"), String(code));
-          const script = runScript(platform, { dir, pkg, flutter: status.flutter, sdk: status.sdk, avd: status.avds[0] });
+          const emu = pickEmulator(status);
+          const script = runScript(platform, { dir, pkg, flutter: status.flutter, sdk: status.sdk, emu });
           const file = join(dir, ".openflow", script.file);
           writeFileSync(file, script.content);
           chmodSync(file, 0o755);
           const t = terminalCommand(platform, file);
           spawn(t.cmd, t.args, { detached: true, stdio: "ignore", shell: platform === "win32" }).unref();
-          res.end(JSON.stringify({ ok: true, dir, avd: status.avds[0] }));
+          res.end(JSON.stringify({ ok: true, dir, avd: emu?.name }));
         } catch (e) {
           res.statusCode = 500;
           res.end(JSON.stringify({ error: (e as Error).message }));

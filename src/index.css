@@ -55,3 +55,5 @@ pre { font-size: 11px; background: #07080b; border: 1px solid var(--line); color
 .cmd code { flex: 1; font-size: 12px; overflow-x: auto; white-space: nowrap; }
 .cmd button { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; font-size: 12px; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.opt { margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
+.opt-label { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
