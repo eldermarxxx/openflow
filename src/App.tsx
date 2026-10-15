@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { generateMainDart } from "./core/codegen";
 import { CONTAINER_TYPES, createNode, emptyApp, findNode, insertChild, removeNode, updateProps, type AppDoc, type WidgetNode, type WidgetType } from "./core/schema";
 import { WidgetIcon } from "./ui/icons";
+import { RunButton } from "./ui/RunButton";
 import { PALETTE_GROUPS, filterPalette } from "./ui/palette";
 
 const ACCENT = "#4f46e5";
@@ -49,6 +50,7 @@ export default function App() {
         <div className="logo">◆</div>
         <div className="proj"><b>{doc.name}</b> <span className="muted">salvo localmente</span></div>
         <div className="spacer" />
+        <RunButton name={doc.name} code={code} />
         <button className="tbtn" onClick={() => setTab("code")} title="Ver código">&lt;/&gt;</button>
         <button className="tbtn primary" onClick={() => navigator.clipboard.writeText(code)} title="Copiar main.dart">Copiar código</button>
       </header>

@@ -43,3 +43,15 @@ label input { background: var(--panel2); border: 1px solid var(--line); border-r
 label input:focus { outline: 1px solid var(--accent); }
 .danger { background: transparent; border: 1px solid #7f1d1d; color: #fca5a5; border-radius: 8px; padding: 8px; }
 pre { font-size: 11px; background: #07080b; border: 1px solid var(--line); color: #e2e8f0; padding: 12px; border-radius: 8px; overflow: auto; margin: 0; }
+.tbtn.run { background: #16a34a; border-color: #16a34a; color: #fff; font-weight: 600; }
+.tbtn:disabled { opacity: .6; cursor: wait; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--panel2); border: 1px solid var(--line); padding: 10px 16px; border-radius: 10px; max-width: 640px; z-index: 20; }
+.modal-bg { position: fixed; inset: 0; background: #000a; display: flex; align-items: center; justify-content: center; z-index: 30; padding: 16px; }
+.modal { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; width: 600px; max-width: 100%; max-height: 90vh; overflow: auto; }
+.modal h3 { margin: 0 0 6px; }
+.steps { padding-left: 20px; display: flex; flex-direction: column; gap: 14px; }
+.steps li.done b { color: #4ade80; }
+.cmd { display: flex; gap: 8px; align-items: center; margin-top: 6px; background: #07080b; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+.cmd code { flex: 1; font-size: 12px; overflow-x: auto; white-space: nowrap; }
+.cmd button { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; font-size: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
