@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { WIDGETS } from "../core/schema";
 import { PALETTE_GROUPS, filterPalette } from "./palette";
 
 describe("palette", () => {
@@ -11,6 +12,6 @@ describe("palette", () => {
   });
   it("todos os widgets do schema aparecem na paleta", () => {
     const all = new Set(PALETTE_GROUPS.flatMap((g) => g.items));
-    expect([...all].sort()).toEqual(["Button", "Column", "Container", "Row", "Text"]);
+    expect([...all].sort()).toEqual(Object.keys(WIDGETS).sort());
   });
 });

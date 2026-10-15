@@ -29,7 +29,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .phone { width: 390px; height: 844px; background: #f3f4f8; border-radius: 6px; overflow: hidden; transform-origin: top center; display: flex; flex-direction: column; flex-shrink: 0; }
 .appbar { background: var(--accent); color: #fff; padding: 64px 18px 18px; font-size: 24px; font-weight: 600; }
 .screen { flex: 1; overflow: auto; }
-.pv:hover { outline-color: #a5b4fc !important; }
 .props { background: var(--panel); border-left: 1px solid var(--line); overflow: auto; }
 .sel-head { display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line); }
 .sel-head svg { width: 22px; height: 22px; }
@@ -38,7 +37,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .tabs button.on { background: var(--line); color: var(--text); }
 .psec { display: flex; flex-direction: column; gap: 10px; padding: 0 16px 16px; }
 .psec h4 { margin: 8px 0 0; }
-label { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 8px; font-size: 13px; color: #cfd3dc; }
+label { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 8px; font-size: 13px; color: #cfd3dc; }
 label input { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; color: var(--text); font: inherit; min-width: 0; }
 label input:focus { outline: 1px solid var(--accent); }
 .danger { background: transparent; border: 1px solid #7f1d1d; color: #fca5a5; border-radius: 8px; padding: 8px; }
@@ -57,3 +56,37 @@ pre { font-size: 11px; background: #07080b; border: 1px solid var(--line); color
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .opt { margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
 .opt-label { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+
+/* Canvas */
+.pv { position: relative; cursor: pointer; outline: 1px dashed transparent; outline-offset: -1px; min-width: 0; }
+.pv:hover { outline-color: #a5b4fc; }
+.pv.sel { outline: 2px solid var(--accent); }
+.pv.spacer { background: repeating-linear-gradient(45deg, #c7d2fe55 0 4px, transparent 4px 8px); }
+.sel-tag { position: absolute; top: 0; left: 0; background: var(--accent); color: #fff; font-size: 11px; padding: 1px 6px; border-radius: 0 0 4px 0; z-index: 2; pointer-events: none; }
+.empty-slot { border: 1px dashed #94a3b8; color: #64748b; font-size: 11px; padding: 10px; text-align: center; border-radius: 4px; min-width: 60px; }
+.drop-inside { outline: 2px dashed #22c55e !important; background-color: #22c55e14; }
+.drop-before-v { box-shadow: 0 -3px 0 #22c55e; } .drop-after-v { box-shadow: 0 3px 0 #22c55e; }
+.drop-before-h { box-shadow: -3px 0 0 #22c55e; } .drop-after-h { box-shadow: 3px 0 0 #22c55e; }
+.drop-bad.drop-inside { outline-color: #ef4444 !important; background-color: #ef444414; }
+.drop-bad.drop-before-v, .drop-bad.drop-after-v, .drop-bad.drop-before-h, .drop-bad.drop-after-h { box-shadow: 0 0 0 2px #ef4444; }
+.tile { cursor: grab; }
+.toast.bad { border-color: #7f1d1d; color: #fecaca; }
+.tbtn.icon { padding: 6px 10px; }
+.danger-icon { margin-left: auto; }
+/* Árvore */
+.tree { padding: 8px 0; }
+.trow { display: flex; align-items: center; gap: 6px; padding: 6px 10px; font-size: 13px; cursor: pointer; color: #cfd3dc; user-select: none; }
+.trow svg { width: 16px; height: 16px; flex-shrink: 0; }
+.trow:hover { background: var(--panel2); }
+.trow.on { background: #134e4a; color: #fff; }
+.trow.drop-inside { outline-offset: -2px; }
+.trow-hint { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.caret { width: 12px; color: var(--muted); }
+.page-row { cursor: default; }
+/* Propriedades */
+.pgroup { display: flex; flex-direction: column; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.pgroup h5 { margin: 0; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+label select { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; color: var(--text); font: inherit; min-width: 0; }
+.color-in { display: flex; gap: 6px; min-width: 0; }
+.color-in input[type=color] { width: 36px; padding: 2px; flex-shrink: 0; height: 34px; }
+.color-in input:not([type=color]) { flex: 1; min-width: 0; }
